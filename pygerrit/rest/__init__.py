@@ -50,7 +50,7 @@ def _decode_response(response):
         return json.loads(content)
     except ValueError:
         logging.error('Invalid json content: %s' % content)
-        return []
+        raise
 
 
 class GerritRestAPI(object):
