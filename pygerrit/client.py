@@ -23,7 +23,7 @@
 """ Gerrit client interface. """
 
 from json import JSONDecoder
-from Queue import Queue, Empty, Full
+from six.moves.queue import Queue, Empty, Full
 
 from . import escape_string
 from .error import GerritError

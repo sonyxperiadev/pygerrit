@@ -24,6 +24,7 @@
 
 from os.path import abspath, expanduser, isfile
 import re
+import six
 import socket
 from threading import Event, Lock
 
@@ -149,7 +150,7 @@ class GerritSSHClient(SSHClient):
         """ Return the version of the remote Gerrit server. """
         if self.remote_version is None:
             result = self.run_gerrit_command("version")
-            version_string = result.stdout.read()
+            version_string = result.stdout.read().decode('utf-8')
             pattern = re.compile(r'^gerrit version (.*)$')
             self.remote_version = _extract_version(version_string, pattern)
         return self.remote_version
@@ -170,7 +171,7 @@ class GerritSSHClient(SSHClient):
         command execution fails.
 
         """
-        if not isinstance(command, basestring):
+        if not isinstance(command, six.string_types):
             raise ValueError("command must be a string")
         gerrit_command = "gerrit " + command
 
