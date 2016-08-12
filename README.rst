@@ -10,6 +10,9 @@ Pygerrit - Client library for interacting with Gerrit Code Review
 Pygerrit provides a simple interface for clients to interact with
 `Gerrit Code Review`_ via ssh or the REST API.
 
+This repository is no longer actively maintained. Development has
+moved to `pygerrit2`_.
+
 Prerequisites
 -------------
 
@@ -124,6 +127,7 @@ Licensed under The MIT License.  Please refer to the `LICENSE`_ file for full
 license details.
 
 .. _`Gerrit Code Review`: https://gerritcodereview.com/
+.. _`pygerrit2`: https://github.com/dpursehouse/pygerrit2
 .. _`requests`: https://github.com/kennethreitz/requests
 .. _`paramiko`: https://github.com/paramiko/paramiko
 .. _example: https://github.com/sonyxperiadev/pygerrit/blob/master/example.py
