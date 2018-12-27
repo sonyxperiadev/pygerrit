@@ -31,6 +31,7 @@ from .error import GerritError
 
 from paramiko import SSHClient, SSHConfig, ProxyCommand
 from paramiko.ssh_exception import SSHException
+import paramiko
 
 
 def _extract_version(version_string, pattern):
@@ -113,6 +114,7 @@ class GerritSSHClient(SSHClient):
         if self.username is None or self.port is None:
             self._configure()
         try:
+            self.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             self.connect(hostname=self.hostname,
                          port=self.port,
                          username=self.username,
