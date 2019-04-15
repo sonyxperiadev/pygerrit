@@ -42,6 +42,8 @@ def _decode_response(response):
 
     """
     content = response.content.strip()
+    if not isinstance(content, str):
+        content = content.decode('utf-8')
     logging.debug(content[:512])
     response.raise_for_status()
     if content.startswith(GERRIT_MAGIC_JSON_PREFIX):
