@@ -29,7 +29,7 @@ from threading import Event, Lock
 
 from .error import GerritError
 
-from paramiko import SSHClient, SSHConfig, ProxyCommand
+from paramiko import AutoAddPolicy, SSHClient, SSHConfig, ProxyCommand
 from paramiko.ssh_exception import SSHException
 
 
@@ -65,7 +65,8 @@ class GerritSSHClient(SSHClient):
 
     """ Gerrit SSH Client, wrapping the paramiko SSH Client. """
 
-    def __init__(self, hostname, username=None, port=None, keepalive=None):
+    def __init__(self, hostname, username=None, port=None,
+                 keepalive=None, auto_add_hosts=False):
         """ Initialise and connect to SSH. """
         super(GerritSSHClient, self).__init__()
         self.remote_version = None
@@ -77,6 +78,8 @@ class GerritSSHClient(SSHClient):
         self.lock = Lock()
         self.proxy = None
         self.keepalive = keepalive
+        if auto_add_hosts:
+            self.set_missing_host_key_policy(AutoAddPolicy())
 
     def _configure(self):
         """ Configure the ssh parameters from the config file. """
