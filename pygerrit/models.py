@@ -93,6 +93,7 @@ class Patchset(object):
         self.number = from_json(json_data, "number")
         self.revision = from_json(json_data, "revision")
         self.ref = from_json(json_data, "ref")
+        self.parents = from_json(json_data, "parents")
         self.uploader = Account.from_json(json_data, "uploader")
 
     def __repr__(self):
