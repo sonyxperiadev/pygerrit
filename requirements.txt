@@ -1,4 +1,4 @@
-ecdsa==0.11
+ecdsa==0.13.3
 paramiko==1.16.0
 pbr>=0.8.0
 pycrypto==2.6.1
