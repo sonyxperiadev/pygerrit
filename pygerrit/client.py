@@ -23,7 +23,7 @@
 """ Gerrit client interface. """
 
 from json import JSONDecoder
-from Queue import Queue, Empty, Full
+from queue import Queue, Empty, Full
 
 from . import escape_string
 from .error import GerritError
@@ -86,7 +86,7 @@ class GerritClient(object):
         :Raises: `ValueError` if `command` is not a string.
 
         """
-        if not isinstance(command, basestring):
+        if not isinstance(command, str):
             raise ValueError("command must be a string")
         return self._ssh_client.run_gerrit_command(command)
 
@@ -104,7 +104,7 @@ class GerritClient(object):
         command = ["query", "--current-patch-set", "--all-approvals",
                    "--format JSON", "--commit-message"]
 
-        if not isinstance(term, basestring):
+        if not isinstance(term, str):
             raise ValueError("term must be a string")
 
         command.append(escape_string(term))

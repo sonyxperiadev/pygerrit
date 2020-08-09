@@ -126,7 +126,7 @@ class GerritSSHClient(SSHClient):
 
         try:
             version_string = self._transport.remote_version
-            pattern = re.compile(r'^.*GerritCodeReview_([a-z0-9-\.]*) .*$')
+            pattern = re.compile(r'^.*GerritCodeReview_([a-z0-9-.]*) .*$')
             self.remote_version = _extract_version(version_string, pattern)
         except AttributeError:
             self.remote_version = None
@@ -160,7 +160,7 @@ class GerritSSHClient(SSHClient):
     def get_remote_info(self):
         """ Return the username, and version of the remote Gerrit server. """
         version = self.get_remote_version()
-        return (self.username, version)
+        return self.username, version
 
     def run_gerrit_command(self, command):
         """ Run the given command.
@@ -173,7 +173,7 @@ class GerritSSHClient(SSHClient):
         command execution fails.
 
         """
-        if not isinstance(command, basestring):
+        if not isinstance(command, str):
             raise ValueError("command must be a string")
         gerrit_command = "gerrit " + command
 
@@ -187,7 +187,6 @@ class GerritSSHClient(SSHClient):
         try:
             stdin, stdout, stderr = self.exec_command(gerrit_command,
                                                       bufsize=1,
-                                                      timeout=None,
                                                       get_pty=False)
         except SSHException as err:
             raise GerritError("Command execution error: %s" % err)

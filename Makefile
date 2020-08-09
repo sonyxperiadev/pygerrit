@@ -39,7 +39,7 @@ VIRTUALENV_OK := $(shell expr `virtualenv --version | \
 
 all: test
 
-test: clean unittests pyflakes pep8 pep257
+test: clean unittests pyflakes pycodestyle
 
 docs: html
 
@@ -79,15 +79,10 @@ sphinx: docenvsetup
               --force \
               -o docs pygerrit"
 
-pep257: testenvsetup
+pycodestyle: testenvsetup
 	bash -c "\
           source ./pygerritenv/bin/activate && \
-          git ls-files | grep \"\.py$$\" | xargs pep257"
-
-pep8: testenvsetup
-	bash -c "\
-          source ./pygerritenv/bin/activate && \
-          git ls-files | grep \"\.py$$\" | xargs pep8 --max-line-length 80"
+          git ls-files | grep \"\.py$$\" | xargs pycodestyle --max-line-length 80"
 
 pyflakes: testenvsetup
 	bash -c "\

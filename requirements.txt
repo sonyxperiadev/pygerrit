@@ -1,5 +1,5 @@
-ecdsa==0.11
-paramiko==1.16.0
-pbr>=0.8.0
+ecdsa==0.15
+paramiko==2.7.1
+pbr>=5.4.5
 pycrypto==2.6.1
-requests==2.9.1
+requests==2.24.0

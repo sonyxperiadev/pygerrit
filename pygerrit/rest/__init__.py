@@ -25,6 +25,7 @@
 import json
 import logging
 import requests
+from requests.auth import AuthBase
 
 GERRIT_MAGIC_JSON_PREFIX = ")]}\'\n"
 GERRIT_AUTH_SUFFIX = "/a"
@@ -76,7 +77,7 @@ class GerritRestAPI(object):
         self.url = url.rstrip('/')
 
         if auth:
-            if not isinstance(auth, requests.auth.AuthBase):
+            if not isinstance(auth, AuthBase):
                 raise ValueError('Invalid auth type; must be derived '
                                  'from requests.auth.AuthBase')
 
@@ -209,13 +210,11 @@ class GerritReview(object):
             self.labels = labels
         else:
             self.labels = {}
+        self.comments = {}
         if comments:
             if not isinstance(comments, list):
                 raise ValueError("comments must be a list.")
-            self.comments = {}
             self.add_comments(comments)
-        else:
-            self.comments = {}
 
     def set_message(self, message):
         """ Set review cover message.
@@ -241,7 +240,7 @@ class GerritReview(object):
     def add_comments(self, comments):
         """ Add inline comments.
 
-        :arg dict comments: Comments to add.
+        :arg list comments: Comments to add.
 
         Usage::
 
@@ -259,7 +258,6 @@ class GerritReview(object):
         """
         for comment in comments:
             if 'filename' and 'message' in comment.keys():
-                msg = {}
                 if 'range' in comment.keys():
                     msg = {"range": comment['range'],
                            "message": comment['message']}
@@ -285,4 +283,4 @@ class GerritReview(object):
             review_input.update({'labels': self.labels})
         if self.comments:
             review_input.update({'comments': self.comments})
-        return json.dumps(review_input)
+        return json.dumps(review_input, sort_keys=True)

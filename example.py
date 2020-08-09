@@ -107,5 +107,6 @@ def _main():
         logging.error("Exited with error")
         return 1
 
+
 if __name__ == "__main__":
     sys.exit(_main())

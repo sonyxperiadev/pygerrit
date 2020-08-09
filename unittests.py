@@ -29,6 +29,7 @@ import json
 import os
 import unittest
 
+from pygerrit.error import GerritError
 from pygerrit.events import PatchsetCreatedEvent, \
     RefUpdatedEvent, ChangeMergedEvent, CommentAddedEvent, \
     ChangeAbandonedEvent, ChangeRestoredEvent, \
@@ -136,6 +137,7 @@ def _create_event(name, gerrit):
     """
     testfile = open(os.path.join("testdata", name + ".txt"))
     data = testfile.read().replace("\n", "")
+    testfile.close()
     gerrit.put_event(data)
     return data
 
@@ -389,10 +391,11 @@ class TestGerritEvents(unittest.TestCase):
 
     def test_add_duplicate_event(self):
         try:
+            # noinspection PyUnusedLocal
             @GerritEventFactory.register("user-defined-event")
             class AnotherUserDefinedEvent(GerritEvent):
                 pass
-        except:
+        except GerritError:
             return
         self.fail("Did not raise exception when duplicate event registered")
 
@@ -411,7 +414,7 @@ class TestGerritReviewMessageFormatter(unittest.TestCase):
 
     def test_is_empty(self):
         """ Test if message is empty for missing header and footer. """
-        f = GerritReviewMessageFormatter(header=None, footer=None)
+        f = GerritReviewMessageFormatter()
         self.assertTrue(f.is_empty())
         f.append(['test'])
         self.assertFalse(f.is_empty())
@@ -443,7 +446,7 @@ class TestGerritReview(unittest.TestCase):
         obj2 = GerritReview(labels={'Verified': 1, 'Code-Review': -1})
         self.assertEqual(
             str(obj2),
-            '{"labels": {"Verified": 1, "Code-Review": -1}}')
+            '{"labels": {"Code-Review": -1, "Verified": 1}}')
 
         obj3 = GerritReview(comments=[{'filename': 'Makefile',
                                       'line': 10, 'message': 'test'}])
@@ -456,8 +459,8 @@ class TestGerritReview(unittest.TestCase):
                                        'message': 'test'}])
         self.assertEqual(
             str(obj4),
-            '{"labels": {"Verified": 1, "Code-Review": -1},'
-            ' "comments": {"Makefile": [{"line": 10, "message": "test"}]}}')
+            '{"comments": {"Makefile": [{"line": 10, "message": "test"}]},'
+            ' "labels": {"Code-Review": -1, "Verified": 1}}')
 
         obj5 = GerritReview(comments=[{'filename': 'Makefile', 'line': 15,
                             'message': 'test'}, {'filename': 'Make',
