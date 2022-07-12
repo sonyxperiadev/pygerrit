@@ -1,5 +1,6 @@
-ecdsa==0.11
-paramiko==1.16.0
-pbr>=0.8.0
+ecdsa==0.18.0
+#paramiko version above 2.8.1 breaks for dsa file issue
+paramiko==2.8.1
+pbr>=5.9.0
 pycrypto==2.6.1
-requests==2.9.1
+requests==2.28.1

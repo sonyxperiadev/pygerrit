@@ -173,7 +173,7 @@ class GerritSSHClient(SSHClient):
         command execution fails.
 
         """
-        if not isinstance(command, basestring):
+        if not isinstance(command, str):
             raise ValueError("command must be a string")
         gerrit_command = "gerrit " + command
 
